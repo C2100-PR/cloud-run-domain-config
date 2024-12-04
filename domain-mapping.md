@@ -1,58 +1,17 @@
 # Cloud Run Domain Mapping Guide
 
-## GoDaddy DNS Configuration
+Add CNAME record in GoDaddy:
+- Type: CNAME
+- Host: disc-assessment
+- Points to: ghs.googlehosted.com
+- TTL: 600
 
-### Required DNS Records
-
-1. Create a CNAME record:
-   - Type: CNAME
-   - Host/Name: disc-assessment (or @ for root domain)
-   - Points to: ghs.googlehosted.com
-   - TTL: 600 seconds (or 1 hour)
-
-### Verification Steps
-
-1. Login to GoDaddy DNS management
-2. Navigate to DNS Management section
-3. Add new record with above settings
-4. Save changes
-
-## Cloud Run Configuration
-
-### Domain Mapping Command
+Configure Cloud Run mapping:
 ```bash
-gcloud run domain-mappings create \
-  --service disc-assessment \
-  --domain YOUR_DOMAIN \
-  --region us-central1 \
-  --platform managed
+gcloud run domain-mappings create --service disc-assessment --domain YOUR_DOMAIN --region us-central1
 ```
 
-### Verification Steps
-
-1. Wait for SSL certificate provisioning (can take up to 24 hours)
-2. Verify mapping status:
+Verify setup:
 ```bash
-gcloud run domain-mappings list \
-  --platform managed \
-  --region us-central1
-```
-
-## Troubleshooting
-
-### Common Issues
-1. DNS propagation can take up to 48 hours
-2. SSL certificate provisioning may require additional verification
-3. Domain ownership verification might be needed in Google Cloud Console
-
-### Verification Commands
-```bash
-# Check domain mapping status
-gcloud run domain-mappings describe \
-  --domain YOUR_DOMAIN \
-  --platform managed \
-  --region us-central1
-
-# Verify DNS resolution
-dig YOUR_DOMAIN
+gcloud run domain-mappings list --platform managed --region us-central1
 ```
